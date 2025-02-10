@@ -1,0 +1,13 @@
+{% extends 'mailsender/base.html' %}
+
+{% block title %}Подтверждение удаления сообщения{% endblock %}
+
+{% block content %}
+    <h1>Подтверждение удаления сообщения</h1>
+    <p>Вы уверены, что хотите удалить сообщение "{{ message.subject }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+    <a href="{% url 'mailsender:messages_list' %}" class="btn btn-secondary">Отмена</a>
+{% endblock %}

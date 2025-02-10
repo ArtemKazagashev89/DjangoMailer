@@ -1,0 +1,27 @@
+{% extends 'mailsender/base.html' %}
+
+{% block title %}Детали рассылки{% endblock %}
+
+{% block content %}
+    <h1>Детали рассылки</h1>
+    <p><strong>Тема сообщения:</strong> {{ mailing.message.subject }}</p>
+    <p><strong>Статус:</strong> {{ mailing.get_status_display }}</p>
+    <p><strong>Дата и время первой отправки:</strong> {{ mailing.first_sending }}</p>
+    <p><strong>Дата и время окончания отправки:</strong> {{ mailing.end_sending }}</p>
+     <p><strong>Получатели:</strong>
+        {% if mailing.addressees.count > 0 %}
+            <ul>
+            {% for recipient in mailing.addressees.all %}
+                <li>{{ recipient.full_name }} ({{ recipient.email }})</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            Нет получателей.
+        {% endif %}
+    </p>
+    <a href="{% url 'mailsender:mailing_attempts' mailing.pk %}" class="btn btn-primary">Отправить рассылку</a>
+    <a href="{% url 'mailsender:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'mailsender:mailing_confirm_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'mailsender:mailings_list' %}" class="btn btn-secondary">Назад к списку</a>
+
+{% endblock %}
