@@ -1,0 +1,9 @@
+{% extends 'mailsender/base.html' %}
+
+{% block title %}Выход{% endblock %}
+
+{% block content %}
+    <h1>Выход</h1>
+    <p>Вы успешно вышли из системы.</p>
+    <a href="{% url 'users:login' %}" class="btn btn-primary">Войти снова</a>
+{% endblock %}
