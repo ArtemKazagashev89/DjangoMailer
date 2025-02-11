@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, UpdateView, View
 from django.views.generic.edit import FormView
 
-from .forms import EditProfileForm, FormCustomUser, PasswordResetForm
+from .forms import EditProfileForm, CustomUserCreationForm, PasswordResetRequestForm
 from .models import CustomUser
 from .services import CACHE_TIMEOUT, CustomUserService
 
@@ -31,7 +31,7 @@ class CustomLogoutView(LogoutView):
 
 
 class RegisterView(FormView):
-    form_class = FormCustomUser
+    form_class = CustomUserCreationForm
     template_name = "register.html"
     success_url = reverse_lazy("mailsender:home")
 
@@ -90,5 +90,5 @@ class ChangeUserStatusView(PermissionRequiredMixin, View):
 
 class PasswordResetRequestView(View):
     def get(self, request):
-        form = PasswordResetForm()
+        form = PasswordResetRequestForm()
         return render(request, "password_reset_request.html", {"form": form})

@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb1defaa-27ed-4936-b759-97696db5f823" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DjangoMailer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DjangoMailer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mailsender/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mailsender/templates/mailsender/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/mailsender/templates/mailsender/header.html" afterDir="false" />
-    </list>
+    <list default="true" id="fb1defaa-27ed-4936-b759-97696db5f823" name="Changes" comment="part2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,6 +69,15 @@
       <option name="presentableId" value="Default" />
       <updated>1739199775696</updated>
     </task>
+    <task id="LOCAL-00001" summary="part2">
+      <option name="closed" value="true" />
+      <created>1739265815012</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739265815012</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -102,5 +102,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="part2" />
+    <option name="LAST_COMMIT_MESSAGE" value="part2" />
   </component>
 </project>
