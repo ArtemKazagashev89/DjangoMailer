@@ -1,3 +1,4 @@
+# users/views.py
 import secrets
 
 from django.contrib import messages
@@ -23,6 +24,10 @@ def email_verification(token):
 class CustomLoginView(LoginView):
     template_name = "login.html"
     success_url = reverse_lazy("mailsender:home")
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Ошибка при входе. Проверьте свои учетные данные.")
+        return super().form_invalid(form)
 
 
 class CustomLogoutView(LogoutView):
@@ -55,19 +60,27 @@ class EditProfileUpdateView(LoginRequiredMixin, UpdateView):
         )
         return reverse_lazy("users:user_profile", kwargs={"pk": self.object.pk})
 
+    def get_queryset(self):
+        return CustomUser.objects.filter(pk=self.request.user.pk)
+
 
 class UsersListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = "users.view_customuser"
     model = CustomUser
     template_name = "all_users.html"
     context_object_name = "users"
-    queryset = CustomUserService.get_all_users().order_by("id")
+
+    def get_queryset(self):
+        return CustomUserService.get_all_users().filter(pk=self.request.user.pk).order_by("id")
 
 
 class UserProfileDetailView(LoginRequiredMixin, DetailView):
     model = CustomUser
     template_name = "user_profile.html"
     context_object_name = "user_profile"
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(pk=self.request.user.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -92,3 +105,4 @@ class PasswordResetRequestView(View):
     def get(self, request):
         form = PasswordResetRequestForm()
         return render(request, "password_reset_request.html", {"form": form})
+
