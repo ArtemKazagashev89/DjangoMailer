@@ -1,10 +1,25 @@
 from django.urls import path
 
 from mailsender.apps import MailsenderConfig
-from mailsender.views import (HomeView, ClientManagementDetailView, ClientManagementCreateView, ClientManagementListView,
-ClientManagementUpdateView, ClientManagementDeleteView, MessageListView, MessageCreateView, MessageUpdateView,
-MessageDeleteView, MailingListView, MailingCreateView, MailingDetailView, MailingUpdateView, MailingDeleteView,
-MailingSendView, MailingAttemptListView)
+from mailsender.views import (
+    HomeView,
+    ClientManagementDetailView,
+    ClientManagementCreateView,
+    ClientManagementListView,
+    ClientManagementUpdateView,
+    ClientManagementDeleteView,
+    MessageListView,
+    MessageCreateView,
+    MessageUpdateView,
+    MessageDeleteView,
+    MailingListView,
+    MailingCreateView,
+    MailingDetailView,
+    MailingUpdateView,
+    MailingDeleteView,
+    MailingSendView,
+    MailingAttemptListView,
+)
 
 app_name = MailsenderConfig.name
 

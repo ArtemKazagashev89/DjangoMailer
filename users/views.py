@@ -104,4 +104,3 @@ class PasswordResetRequestView(View):
     def get(self, request):
         form = PasswordResetRequestForm()
         return render(request, "password_reset_request.html", {"form": form})
-

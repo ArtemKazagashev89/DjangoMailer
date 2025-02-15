@@ -20,7 +20,9 @@ class HomeView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["total_mailings"] = Mailing.objects.filter(owner=self.request.user).count()
         context["active_mailings"] = Mailing.objects.filter(owner=self.request.user, status=Mailing.LAUNCHED).count()
-        context["unique_recipients"] = ClientManagement.objects.filter(owner=self.request.user).values("email").distinct().count()
+        context["unique_recipients"] = (
+            ClientManagement.objects.filter(owner=self.request.user).values("email").distinct().count()
+        )
         return context
 
 
