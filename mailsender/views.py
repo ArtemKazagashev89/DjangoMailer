@@ -1,15 +1,14 @@
 from django.conf import settings
+from django.core.mail import BadHeaderError, send_mail
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import BadHeaderError, send_mail
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from .forms import ClientManagementForm
-from .models import ClientManagement, Mailing, MailingAttempt, Message
+from .models import ClientManagement, Mailing, Message, MailingAttempt
 
 
 class HomeView(LoginRequiredMixin, ListView):
@@ -41,9 +40,18 @@ class ClientManagementCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("mailsender:clients_list")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # Установка текущего пользователя как владельца
+        form.instance.owner = self.request.user
         messages.success(self.request, "Клиент успешно создан.")
         return super().form_valid(form)
+
+
+class ClientManagementDetailView(LoginRequiredMixin, DetailView):
+    model = ClientManagement
+    template_name = "mailsender/client_detail.html"
+    context_object_name = "client"
+
+    def get_queryset(self):
+        return ClientManagement.objects.filter(owner=self.request.user)
 
 
 class ClientManagementUpdateView(LoginRequiredMixin, UpdateView):
@@ -73,15 +81,6 @@ class ClientManagementDeleteView(LoginRequiredMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class ClientManagementDetailView(LoginRequiredMixin, DetailView):
-    model = ClientManagement
-    template_name = "mailsender/client_detail.html"
-    context_object_name = "client"
-
-    def get_queryset(self):
-        return ClientManagement.objects.filter(owner=self.request.user)
-
-
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
     template_name = "mailsender/messages_list.html"
@@ -98,7 +97,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("mailsender:messages_list")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # Установка текущего пользователя как владельца
+        form.instance.owner = self.request.user
         messages.success(self.request, "Сообщение успешно создано.")
         return super().form_valid(form)
 
@@ -155,7 +154,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("mailsender:mailings_list")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # Установка текущего пользователя как владельца
+        form.instance.owner = self.request.user
         messages.success(self.request, "Рассылка успешно создана.")
         return super().form_valid(form)
 
@@ -190,41 +189,25 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
 class MailingSendView(LoginRequiredMixin, View):
     def post(self, request, pk):
         mailing = get_object_or_404(Mailing, pk=pk, owner=request.user)
-        self.send_emails(mailing)
-        self.update_status(mailing, Mailing.LAUNCHED)
+        self.send_mailing(mailing)
         messages.success(request, "Рассылка успешно отправлена.")
         return redirect("mailsender:mailings_list")
 
-    def send_emails(self, mailing):
-        recipients = [recipient.email for recipient in mailing.addressees.all()]
-        for receiver in recipients:
+    def send_mailing(self, mailing):
+        for recipient in mailing.addressees.all():
             try:
                 send_mail(
                     subject=mailing.message.subject,
                     message=mailing.message.body,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[receiver],
+                    recipient_list=[recipient.email],
                     fail_silently=False,
                 )
-                MailingAttempt.objects.create(
-                    mailing=mailing, status="Success", server_answer=f"Email sent to {receiver}"
-                )
+                messages.success(self.request, f"Сообщение успешно отправлено на {recipient.email}.")
             except BadHeaderError:
-                self.handle_exception("Invalid header found.", receiver, mailing)
+                messages.error(self.request, f"Неверный заголовок для {recipient.email}.")
             except Exception as e:
-                self.handle_exception(str(e), receiver, mailing)
-
-    def handle_exception(self, error_message, receiver, mailing):
-        MailingAttempt.objects.create(
-            mailing=mailing,
-            status="Failed",
-            server_answer=f'Error occurred: "{error_message}" when sending to {receiver}',
-        )
-
-    def update_status(self, mailing, status):
-        if mailing.status != status:
-            mailing.status = status
-            mailing.save()
+                messages.error(self.request, f"Ошибка при отправке на {recipient.email}: {str(e)}")
 
 
 class MailingAttemptListView(LoginRequiredMixin, ListView):

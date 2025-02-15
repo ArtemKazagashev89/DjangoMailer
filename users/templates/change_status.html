@@ -9,5 +9,5 @@
         <p>Текущий статус: {{ user.is_active|yesno:"Активен,Не активен" }}</p>
         <button type="submit" class="btn btn-danger">Изменить статус</button>
     </form>
-    <a href="{% url 'users:all-users' %}" class="btn btn-secondary">Назад к списку пользователей</a>
+    <a href="{% url 'users:all_users' %}" class="btn btn-secondary">Назад к списку пользователей</a>
 {% endblock %}

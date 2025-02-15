@@ -1,4 +1,3 @@
-# users/views.py
 import secrets
 
 from django.contrib import messages
