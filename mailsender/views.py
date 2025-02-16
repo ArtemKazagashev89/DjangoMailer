@@ -104,6 +104,19 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class MessageDetailView(LoginRequiredMixin, DetailView):
+    model = Message
+    template_name = "mailsender/message_detail.html"
+    context_object_name = "message"
+
+    def get_queryset(self):
+        return Message.objects.filter(owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     fields = ["subject", "body"]
