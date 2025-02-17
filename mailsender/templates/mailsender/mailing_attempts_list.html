@@ -5,8 +5,7 @@
 {% block content %}
     <h1>Попытки рассылки: {{ mailing.message.subject }}</h1>
     <p><strong>Статус рассылки:</strong> {{ mailing.get_status_display }}</p>
-    <table class="table">
-        <thead>
+    <thead>
             <tr>
                 <th>Дата и время попытки</th>
                 <th>Статус</th>
@@ -14,12 +13,12 @@
             </tr>
         </thead>
         <tbody>
-            {% if mailing_attempts.count > 0 %}
+            {% if mailing_attempts %}
                 {% for attempt in mailing_attempts %}
                     <tr>
                         <td>{{ attempt.attempt_at }}</td>
-                        <td>{{ attempt.get_status_display }}</td>  <!-- Используем get_status_display для отображения читаемого статуса -->
-                        <td>{{ attempt.server_answer }}</td>
+                        <td>{{ attempt.get_status_display }}</td>
+                        <td>{{ attempt.server_response }}</td>
                     </tr>
                 {% endfor %}
             {% else %}

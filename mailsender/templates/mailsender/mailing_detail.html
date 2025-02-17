@@ -19,7 +19,10 @@
             Нет получателей.
         {% endif %}
     </p>
-    <a href="{% url 'mailsender:mailing_attempts' mailing.pk %}" class="btn btn-primary">Отправить рассылку</a>
+    <form method="POST" action="{% url 'mailsender:send_mailing' mailing.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Отправить рассылку</button>
+    </form>
     <a href="{% url 'mailsender:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
     <a href="{% url 'mailsender:mailing_confirm_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
     <a href="{% url 'mailsender:mailings_list' %}" class="btn btn-secondary">Назад к списку</a>

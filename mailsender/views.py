@@ -210,6 +210,7 @@ class MailingSendView(LoginRequiredMixin, View):
 
     def send_mailing(self, mailing):
         for recipient in mailing.addressees.all():
+            attempt = MailingAttempt(mailing=mailing, owner=self.request.user)
             try:
                 send_mail(
                     subject=mailing.message.subject,
@@ -218,11 +219,17 @@ class MailingSendView(LoginRequiredMixin, View):
                     recipient_list=[recipient.email],
                     fail_silently=False,
                 )
+                attempt.status = MailingAttempt.SUCCESS
                 messages.success(self.request, f"Сообщение успешно отправлено на {recipient.email}.")
             except BadHeaderError:
+                attempt.status = MailingAttempt.FAILED
                 messages.error(self.request, f"Неверный заголовок для {recipient.email}.")
             except Exception as e:
+                attempt.status = MailingAttempt.FAILED
                 messages.error(self.request, f"Ошибка при отправке на {recipient.email}: {str(e)}")
+            finally:
+                attempt.server_response = str(e) if 'e' in locals() else "Успешно"
+                attempt.save()  # Сохраняем попытку
 
 
 class MailingAttemptListView(LoginRequiredMixin, ListView):
