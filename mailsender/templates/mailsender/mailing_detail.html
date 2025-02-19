@@ -23,6 +23,7 @@
     {% csrf_token %}
     <button type="submit" class="btn btn-success">Отправить рассылку</button>
     </form>
+    <a href="{% url 'mailsender:mailing_attempts' mailing_id=mailing.id %}" class="btn btn-info">Попытки рассылки</a>
     <a href="{% url 'mailsender:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
     <a href="{% url 'mailsender:mailing_confirm_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
     <a href="{% url 'mailsender:mailings_list' %}" class="btn btn-secondary">Назад к списку</a>
