@@ -19,6 +19,7 @@
                     <td>{{ mailing.message.subject }}</td>
                     <td>{{ mailing.get_status_display }}</td>
                     <td>
+                        <a href="{% url 'mailsender:mailing_attempts' mailing_id=mailing.id %}" class="btn btn-secondary">Попытки рассылки</a>
                         <a href="{% url 'mailsender:mailing_detail' mailing.pk %}" class="btn btn-info">Просмотр</a>
                         <a href="{% url 'mailsender:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
                         <a href="{% url 'mailsender:mailing_confirm_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
